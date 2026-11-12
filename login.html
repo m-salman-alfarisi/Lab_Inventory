@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <!-- Custom Styles -->
   <link rel="stylesheet" href="css/style.css" />
+  <!-- QR Code Generator Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     // Theme Initializer - Default to Light Mode
     (function() {
@@ -474,26 +476,43 @@
 
               <form id="borrow-form" class="space-y-4">
                 <div>
-                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Nama Peminjam (Mahasiswa / Dosen) *</label>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Nama Peminjam (Mahasiswa / Dosen / Staf) *</label>
                   <input id="borrower-name" type="text" required placeholder="Contoh: Budi Hartono (NIM: 230101015)"
                     class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none text-sm" />
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">No. HP / Kontak</label>
-                    <input id="borrower-contact" type="text" placeholder="0812xxxx"
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">No. WhatsApp Aktif *</label>
+                    <input id="borrower-contact" type="text" required placeholder="Contoh: 081234567890"
                       class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm" />
                   </div>
+                  <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Jaminan Identitas Fisik *</label>
+                    <select id="borrower-guarantee" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm bg-white">
+                      <option value="KTM (Kartu Tanda Mahasiswa)">KTM (Kartu Mahasiswa)</option>
+                      <option value="KTP (Kartu Tanda Penduduk)">KTP (Elektronik)</option>
+                      <option value="Kartu Pegawai / Dosen">Kartu Pegawai / Dosen</option>
+                      <option value="SIM Aktif">SIM Aktif</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Tanggal Pinjam *</label>
                     <input id="borrow-date" type="date" required
                       class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm" />
                   </div>
+                  <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Jumlah Barang *</label>
+                    <input id="borrow-quantity" type="number" min="1" value="1" required
+                      class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm font-bold" />
+                  </div>
                 </div>
 
                 <div>
-                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Pilih Barang *</label>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Pilih Peralatan Laboratorium *</label>
                   <select id="borrow-item-id" required
                     class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm bg-white">
                     <option value="">-- Pilih Peralatan Laboratorium --</option>
@@ -502,13 +521,7 @@
                 </div>
 
                 <div>
-                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Jumlah Barang Dipinjam *</label>
-                  <input id="borrow-quantity" type="number" min="1" value="1" required
-                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm font-bold" />
-                </div>
-
-                <div>
-                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Keperluan / Mata Kuliah</label>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Keperluan / Praktikum</label>
                   <input id="borrow-purpose" type="text" placeholder="Contoh: Praktikum Jaringan Komputer"
                     class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm" />
                 </div>
@@ -917,6 +930,90 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 5: TIKET / STRUK BUKTI PEMINJAMAN BER-QR CODE ==================== -->
+  <div id="receipt-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 modal-backdrop p-4">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden animate-scaleUp">
+      <!-- Header Struk -->
+      <div class="px-6 py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white flex items-center justify-between no-print">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid fa-receipt text-lg"></i>
+          <h3 class="font-extrabold text-base">Bukti Peminjaman Alat Lab</h3>
+        </div>
+        <button onclick="App.closeReceiptModal()" class="text-white/80 hover:text-white transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Printable Ticket Area -->
+      <div id="receipt-printable-area" class="p-6 space-y-5 bg-white text-slate-800">
+        <div class="text-center pb-4 border-b border-dashed border-slate-300">
+          <div class="inline-flex items-center gap-2 text-blue-600 font-extrabold text-lg">
+            <i class="fa-solid fa-computer"></i>
+            <span>SIMLAB SISTEM</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Laboratorium Komputer &amp; Jaringan Terpadu</p>
+          <div class="mt-2 inline-block px-3 py-1 bg-slate-100 rounded-lg text-xs font-mono font-bold text-slate-700">
+            ID: <span id="receipt-trx-id">TRX-00000000-000</span>
+          </div>
+        </div>
+
+        <!-- QR Code Container -->
+        <div class="flex flex-col items-center justify-center py-2">
+          <div id="receipt-qrcode" class="p-3 bg-white border border-slate-200 rounded-2xl shadow-sm"></div>
+          <p class="text-[11px] text-slate-400 mt-2 font-mono">Scan QR untuk verifikasi pengembalian alat</p>
+        </div>
+
+        <!-- Detail Information Table -->
+        <div class="bg-slate-50 rounded-2xl p-4 space-y-2.5 text-xs border border-slate-100">
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500">Peminjam:</span>
+            <span id="receipt-borrower" class="font-bold text-slate-800 text-right">-</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500">WhatsApp / Kontak:</span>
+            <span id="receipt-contact" class="font-mono text-slate-700 text-right">-</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500">Jaminan Identitas:</span>
+            <span id="receipt-guarantee" class="font-semibold text-emerald-700 text-right">-</span>
+          </div>
+          <div class="flex justify-between items-center pt-2 border-t border-slate-200/60">
+            <span class="text-slate-500">Barang Laboratorium:</span>
+            <span id="receipt-item" class="font-bold text-blue-600 text-right">-</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500">Jumlah Unit:</span>
+            <span id="receipt-qty" class="font-black text-slate-900 text-right">-</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500">Tanggal Pinjam:</span>
+            <span id="receipt-date" class="font-semibold text-slate-800 text-right">-</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500">Petugas Jaga:</span>
+            <span id="receipt-staff" class="font-medium text-slate-700 text-right">-</span>
+          </div>
+        </div>
+
+        <!-- Footer Struk -->
+        <div class="text-[11px] text-center text-slate-400 leading-relaxed border-t border-dashed border-slate-300 pt-3">
+          Tunjukkan bukti digital ini saat mengembalikan barang beserta kartu jaminan fisik.
+        </div>
+      </div>
+
+      <!-- Action Buttons Modal -->
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3 no-print">
+        <button type="button" onclick="App.closeReceiptModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-white transition">
+          Selesai / Tutup
+        </button>
+        <button type="button" onclick="App.printReceipt()" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md shadow-blue-600/20 transition flex items-center gap-2">
+          <i class="fa-solid fa-print"></i>
+          <span>Cetak Bukti Pinjam</span>
+        </button>
+      </div>
     </div>
   </div>
 

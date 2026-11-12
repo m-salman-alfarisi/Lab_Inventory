@@ -48,7 +48,7 @@
           <span>Cek Stok Live</span>
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         </a>
-        <a href="#alur" class="hover:text-blue-600 dark:hover:text-white transition">Alur Peminjaman</a>
+        <a href="#alur" class="hover:text-blue-600 dark:hover:text-white transition">Alur &amp; SOP</a>
         <a href="#role" class="hover:text-blue-600 dark:hover:text-white transition">Role &amp; Akses</a>
       </nav>
 
@@ -263,42 +263,42 @@
   <section id="alur" class="landing-section-alt py-20 border-t transition-colors duration-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center max-w-2xl mx-auto mb-14">
-        <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/25 text-xs font-bold uppercase tracking-widest text-blue-700 dark:text-blue-400">Standard Operating Procedure</span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold mt-3 tracking-tight">4 Langkah Sirkulasi Peminjaman</h2>
-        <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">Alur kerja terstandarisasi dari autentikasi petugas hingga pengembalian stok otomatis.</p>
+        <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/25 text-xs font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400">Standard Operating Procedure</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold mt-3 tracking-tight">SOP &amp; Alur Sirkulasi Laboratorium</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">Standar operasional baku peminjaman dan pengembalian alat laboratorium komputer dengan bukti tiket digital.</p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
         <div class="bento-card p-6 rounded-3xl relative">
           <div class="flex items-center justify-between mb-4">
             <span class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 font-mono text-xs font-bold border border-blue-200 dark:border-transparent">STEP 01</span>
-            <i class="fa-solid fa-right-to-bracket text-slate-400 text-lg"></i>
+            <i class="fa-solid fa-boxes-packing text-slate-400 text-lg"></i>
           </div>
-          <h4 class="font-bold text-base">Login Sesuai Role</h4>
+          <h4 class="font-bold text-base">Cek Ketersediaan Alat</h4>
           <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-            Petugas masuk sebagai <strong>Admin</strong> atau <strong>Staff</strong>. Sistem memverifikasi status keaktifan akun secara instan.
+            Peminjam memantau ketersediaan stok fisik secara live melalui katalog publik SIMLAB sebelum datang ke lab.
           </p>
         </div>
 
         <div class="bento-card p-6 rounded-3xl relative">
           <div class="flex items-center justify-between mb-4">
-            <span class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 font-mono text-xs font-bold border border-blue-200 dark:border-transparent">STEP 02</span>
-            <i class="fa-solid fa-magnifying-glass-chart text-slate-400 text-lg"></i>
+            <span class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 font-mono text-xs font-bold border border-indigo-200 dark:border-transparent">STEP 02</span>
+            <i class="fa-solid fa-id-card text-slate-400 text-lg"></i>
           </div>
-          <h4 class="font-bold text-base">Cek &amp; Pilih Alat</h4>
+          <h4 class="font-bold text-base">Verifikasi Identitas &amp; Jaminan</h4>
           <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-            Cari alat berdasarkan kode atau kategori. Sistem membatasi kuota input agar tidak melebihi stok yang tersedia.
+            Menyerahkan kartu identitas (KTM/KTP/NIP) sebagai jaminan dan nomor WhatsApp aktif kepada petugas lab.
           </p>
         </div>
 
         <div class="bento-card p-6 rounded-3xl relative">
           <div class="flex items-center justify-between mb-4">
-            <span class="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 font-mono text-xs font-bold border border-amber-200 dark:border-transparent">STEP 03</span>
-            <i class="fa-solid fa-hand-holding-hand text-slate-400 text-lg"></i>
+            <span class="px-2.5 py-1 rounded-lg bg-purple-50 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 font-mono text-xs font-bold border border-purple-200 dark:border-transparent">STEP 03</span>
+            <i class="fa-solid fa-qrcode text-slate-400 text-lg"></i>
           </div>
-          <h4 class="font-bold text-base">Catat Peminjaman</h4>
+          <h4 class="font-bold text-base">Input &amp; Tiket QR Code</h4>
           <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-            Simpan nama peminjam, jumlah unit, dan tanggal pinjam. Stok barang otomatis berkurang dan berstatus <strong>Dipinjam</strong>.
+            Petugas mencatat transaksi di sistem, stok berkurang otomatis, dan menerbitkan struk peminjaman ber-QR Code.
           </p>
         </div>
 
@@ -307,10 +307,60 @@
             <span class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-200 dark:border-transparent">STEP 04</span>
             <i class="fa-solid fa-circle-check text-slate-400 text-lg"></i>
           </div>
-          <h4 class="font-bold text-base">Proses Pengembalian</h4>
+          <h4 class="font-bold text-base">Inspeksi &amp; Selesai</h4>
           <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-            Verifikasi barang kembali dengan 1 klik. Stok otomatis bertambah kembali dan status transaksi berubah menjadi <strong>Selesai</strong>.
+            Pemeriksaan kondisi fisik saat dikembalikan, verifikasi QR Code transaksi, stok pulih otomatis, dan jaminan diserahkan kembali.
           </p>
+        </div>
+      </div>
+
+      <!-- Detail Box SOP Resmi -->
+      <div class="bento-card p-7 sm:p-8 rounded-3xl border-emerald-200 dark:border-emerald-500/30">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-white/10 mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-lg shrink-0">
+              <i class="fa-solid fa-file-contract"></i>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white">Tata Tertib &amp; Kebijakan Laboratorium Komputer</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Pedoman operasional penggunaan sarana dan prasarana laboratorium.</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-200 dark:border-emerald-500/30 self-start sm:self-auto">
+            SOP-LAB-IT-2026
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+          <div class="space-y-1.5">
+            <div class="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-blue-600 dark:text-blue-400"></i>
+              <span>1. Tanggung Jawab Fisik</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Peminjam bertanggung jawab mutlak atas kondisi alat selama berstatus <strong>Dipinjam</strong> hingga dikembalikan secara resmi ke petugas jaga lab.
+            </p>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <i class="fa-solid fa-ban text-rose-600 dark:text-rose-400"></i>
+              <span>2. Larangan Pindah Tangan</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Alat tidak boleh dipinjamkan kembali kepada pihak ketiga tanpa verifikasi transaksi baru oleh petugas berwenang SIMLAB.
+            </p>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <i class="fa-solid fa-triangle-exclamation text-amber-600 dark:text-amber-400"></i>
+              <span>3. Ketentuan Ganti Rugi</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Kerusakan komponen atau kehilangan akibat kelalaian wajib diganti dengan alat ber-spesifikasi setara sesuai kebijakan pimpinan lab.
+            </p>
+          </div>
         </div>
       </div>
     </div>

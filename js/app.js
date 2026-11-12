@@ -934,6 +934,7 @@ const App = {
   handleCreateBorrow() {
     const borrowerName = document.getElementById('borrower-name').value.trim();
     const borrowerContact = document.getElementById('borrower-contact').value.trim();
+    const borrowerGuarantee = document.getElementById('borrower-guarantee')?.value || 'KTM';
     const purpose = document.getElementById('borrow-purpose').value.trim();
     const itemId = document.getElementById('borrow-item-id').value;
     const quantity = parseInt(document.getElementById('borrow-quantity').value, 10);
@@ -971,6 +972,7 @@ const App = {
       id: trxId,
       borrowerName,
       borrowerContact: borrowerContact || '-',
+      borrowerGuarantee: borrowerGuarantee,
       purpose: purpose || 'Kegiatan Praktikum / Lab',
       itemId: item.id,
       itemCode: item.code,
@@ -992,7 +994,7 @@ const App = {
     DB.addActivity(
       'BORROW',
       'Peminjaman Barang Baru',
-      `${borrowerName} meminjam ${quantity} unit ${item.name} (${item.code})`,
+      `${borrowerName} meminjam ${quantity} unit ${item.name} (${item.code}) [Jaminan: ${borrowerGuarantee}]`,
       this.currentUser
     );
 
@@ -1004,7 +1006,10 @@ const App = {
     document.getElementById('borrow-quantity').value = 1;
 
     this.renderAll();
-    this.showToast(`Transaksi ${trxId} berhasil disimpan! Stok ${item.name} berkurang ${quantity} unit.`, 'success');
+    this.showToast(`Transaksi ${trxId} berhasil disimpan!`, 'success');
+
+    // Buka Tiket Struk Peminjaman Ber-QR Code Otomatis
+    this.openReceiptModal(newTrx);
   },
 
   renderBorrowTable() {
@@ -1045,7 +1050,8 @@ const App = {
         </td>
         <td class="px-4 py-3.5">
           <div class="font-semibold text-slate-800 text-sm">${this.escapeHtml(trx.borrowerName)}</div>
-          <div class="text-xs text-slate-500">${this.escapeHtml(trx.purpose || '-')} ${trx.borrowerContact && trx.borrowerContact !== '-' ? '• ' + this.escapeHtml(trx.borrowerContact) : ''}</div>
+          <div class="text-xs text-slate-500">${this.escapeHtml(trx.purpose || '-')} ${trx.borrowerContact && trx.borrowerContact !== '-' ? '• <i class="fa-brands fa-whatsapp text-emerald-600 mr-0.5"></i>' + this.escapeHtml(trx.borrowerContact) : ''}</div>
+          ${trx.borrowerGuarantee ? `<div class="text-[11px] text-emerald-700 font-semibold mt-0.5"><i class="fa-solid fa-id-card mr-1"></i>Jaminan: ${this.escapeHtml(trx.borrowerGuarantee)}</div>` : ''}
         </td>
         <td class="px-4 py-3.5">
           <span class="font-mono text-xs font-bold text-blue-600">[${this.escapeHtml(trx.itemCode)}]</span>
@@ -1058,12 +1064,17 @@ const App = {
         </td>
         <td class="px-4 py-3.5 text-center">${this.getTransactionStatusBadge(trx.status)}</td>
         <td class="px-4 py-3.5 text-right">
-          ${trx.status === 'Dipinjam'
-            ? `<button onclick="App.openReturnModal('${trx.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition inline-flex items-center gap-1.5">
-                <i class="fa-solid fa-rotate-left"></i> Kembalikan
-               </button>`
-            : `<span class="text-xs text-slate-400"><i class="fa-solid fa-check-double text-emerald-500 mr-1"></i>Selesai</span>`
-          }
+          <div class="flex items-center justify-end gap-1.5">
+            <button onclick="App.openReceiptModalById('${trx.id}')" title="Lihat Struk / QR Code" class="p-1.5 rounded-lg border border-slate-200 hover:bg-blue-50 hover:text-blue-600 text-slate-600 text-xs transition">
+              <i class="fa-solid fa-qrcode"></i>
+            </button>
+            ${trx.status === 'Dipinjam'
+              ? `<button onclick="App.openReturnModal('${trx.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition inline-flex items-center gap-1.5">
+                  <i class="fa-solid fa-rotate-left"></i> Kembalikan
+                 </button>`
+              : `<span class="text-xs text-slate-400"><i class="fa-solid fa-check-double text-emerald-500 mr-1"></i>Selesai</span>`
+            }
+          </div>
         </td>
       </tr>
     `).join('');
@@ -1617,6 +1628,59 @@ const App = {
       toast.classList.add('opacity-0', 'translate-y-2');
       setTimeout(() => toast.remove(), 300);
     }, 3800);
+  },
+
+  // ==================== TIKET & STRUK QR CODE MODAL ====================
+  openReceiptModal(trx) {
+    if (!trx) return;
+    const modal = document.getElementById('receipt-modal');
+    if (!modal) return;
+
+    document.getElementById('receipt-trx-id').textContent = trx.id;
+    document.getElementById('receipt-borrower').textContent = trx.borrowerName;
+    document.getElementById('receipt-contact').textContent = trx.borrowerContact || '-';
+    document.getElementById('receipt-guarantee').textContent = trx.borrowerGuarantee || 'KTM';
+    document.getElementById('receipt-item').textContent = `[${trx.itemCode}] ${trx.itemName}`;
+    document.getElementById('receipt-qty').textContent = `${trx.quantity} Unit`;
+    document.getElementById('receipt-date').textContent = this.formatDate(trx.borrowDate);
+    document.getElementById('receipt-staff').textContent = trx.handledBy || this.currentUser?.name || 'Petugas Lab';
+
+    // Generate QR Code via qrcodejs
+    const qrContainer = document.getElementById('receipt-qrcode');
+    qrContainer.innerHTML = '';
+    if (window.QRCode) {
+      new QRCode(qrContainer, {
+        text: `SIMLAB-TRX:${trx.id}|${trx.itemCode}|QTY:${trx.quantity}|${trx.borrowerName}`,
+        width: 140,
+        height: 140,
+        colorDark: "#0f172a",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } else {
+      qrContainer.innerHTML = `<div class="font-mono text-xs font-bold text-slate-800 p-4 border border-dashed rounded-lg">${trx.id}</div>`;
+    }
+
+    modal.classList.remove('hidden');
+  },
+
+  openReceiptModalById(trxId) {
+    const transactions = DB.getTransactions();
+    const trx = transactions.find(t => t.id === trxId);
+    if (trx) {
+      this.openReceiptModal(trx);
+    } else {
+      this.showToast('Data transaksi tidak ditemukan.', 'error');
+    }
+  },
+
+  closeReceiptModal() {
+    const modal = document.getElementById('receipt-modal');
+    if (modal) modal.classList.add('hidden');
+  },
+
+  printReceipt() {
+    window.print();
   }
 };
 
