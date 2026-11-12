@@ -1139,9 +1139,14 @@ const App = {
         </td>
         <td class="px-4 py-4 text-center">${this.getTransactionStatusBadge(trx.status)}</td>
         <td class="px-4 py-4 text-right">
-          <button onclick="App.openReturnModal('${trx.id}')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition inline-flex items-center gap-1.5">
-            <i class="fa-solid fa-box-archive"></i> Proses Pengembalian
-          </button>
+          <div class="flex items-center justify-end gap-1.5">
+            <button onclick="App.openReceiptModalById('${trx.id}')" title="Verifikasi Tiket QR" class="p-2 rounded-xl border border-slate-200 hover:bg-blue-50 text-blue-600 text-xs transition">
+              <i class="fa-solid fa-qrcode"></i>
+            </button>
+            <button onclick="App.openReturnModal('${trx.id}')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition inline-flex items-center gap-1.5">
+              <i class="fa-solid fa-box-archive"></i> Proses Pengembalian
+            </button>
+          </div>
         </td>
       </tr>
     `).join('');
@@ -1237,7 +1242,7 @@ const App = {
     });
 
     if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-10 text-center text-slate-400 text-sm">Tidak ada riwayat transaksi yang ditemukan.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-10 text-center text-slate-400 text-sm">Tidak ada riwayat transaksi yang ditemukan.</td></tr>`;
       return;
     }
 
@@ -1261,6 +1266,12 @@ const App = {
           ${trx.returnNote ? `<div class="text-[11px] text-slate-400 italic mt-0.5">"${this.escapeHtml(trx.returnNote)}"</div>` : ''}
         </td>
         <td class="px-4 py-3.5 text-center">${this.getTransactionStatusBadge(trx.status)}</td>
+        <td class="px-4 py-3.5 text-right">
+          <button onclick="App.openReceiptModalById('${trx.id}')" title="Lihat Tiket QR Code & Bukti Pinjam" class="px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-blue-50 text-blue-600 text-xs font-semibold transition inline-flex items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>Tiket QR</span>
+          </button>
+        </td>
       </tr>
     `).join('');
   },
