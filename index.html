@@ -6,6 +6,11 @@
   <title>SIMLAB — Laboratory Inventory &amp; Borrowing Management System</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <!-- Custom Styles -->
@@ -322,42 +327,42 @@
               <i class="fa-solid fa-file-contract"></i>
             </div>
             <div>
-              <h3 class="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white">Tata Tertib &amp; Kebijakan Laboratorium Komputer</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Pedoman operasional penggunaan sarana dan prasarana laboratorium.</p>
+              <h3 class="font-extrabold text-base sm:text-lg text-black dark:text-white">Tata Tertib &amp; Kebijakan Laboratorium Komputer</h3>
+              <p class="sop-subtitle-text text-xs text-black dark:text-slate-400">Pedoman operasional penggunaan sarana dan prasarana laboratorium.</p>
             </div>
           </div>
-          <span class="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-200 dark:border-emerald-500/30 self-start sm:self-auto">
+          <span class="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-300 dark:border-emerald-500/30 self-start sm:self-auto">
             SOP-LAB-IT-2026
           </span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
           <div class="space-y-1.5">
-            <div class="font-bold text-black dark:text-white flex items-center gap-2">
-              <i class="fa-solid fa-shield-halved text-blue-600 dark:text-blue-400"></i>
-              <span class="text-black dark:text-white font-bold">1. Tanggung Jawab Fisik</span>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-blue-600 dark:text-blue-400 shrink-0"></i>
+              <span class="sop-title-text font-bold text-black dark:text-white text-sm">1. Tanggung Jawab Fisik</span>
             </div>
-            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Peminjam bertanggung jawab mutlak atas kondisi alat selama berstatus <strong>Dipinjam</strong> hingga dikembalikan secara resmi ke petugas jaga lab.
+            <p class="sop-body-text text-xs text-black dark:text-slate-400 leading-relaxed font-normal">
+              Peminjam bertanggung jawab mutlak atas kondisi alat selama berstatus <strong class="text-black dark:text-white font-bold">Dipinjam</strong> hingga dikembalikan secara resmi ke petugas jaga lab.
             </p>
           </div>
 
           <div class="space-y-1.5">
-            <div class="font-bold text-black dark:text-white flex items-center gap-2">
-              <i class="fa-solid fa-ban text-rose-600 dark:text-rose-400"></i>
-              <span class="text-black dark:text-white font-bold">2. Larangan Pindah Tangan</span>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-ban text-rose-600 dark:text-rose-400 shrink-0"></i>
+              <span class="sop-title-text font-bold text-black dark:text-white text-sm">2. Larangan Pindah Tangan</span>
             </div>
-            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="sop-body-text text-xs text-black dark:text-slate-400 leading-relaxed font-normal">
               Alat tidak boleh dipinjamkan kembali kepada pihak ketiga tanpa verifikasi transaksi baru oleh petugas berwenang SIMLAB.
             </p>
           </div>
 
           <div class="space-y-1.5">
-            <div class="font-bold text-black dark:text-white flex items-center gap-2">
-              <i class="fa-solid fa-triangle-exclamation text-amber-600 dark:text-amber-400"></i>
-              <span class="text-black dark:text-white font-bold">3. Ketentuan Ganti Rugi</span>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-triangle-exclamation text-amber-600 dark:text-amber-400 shrink-0"></i>
+              <span class="sop-title-text font-bold text-black dark:text-white text-sm">3. Ketentuan Ganti Rugi</span>
             </div>
-            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="sop-body-text text-xs text-black dark:text-slate-400 leading-relaxed font-normal">
               Kerusakan komponen atau kehilangan akibat kelalaian wajib diganti dengan alat ber-spesifikasi setara sesuai kebijakan pimpinan lab.
             </p>
           </div>

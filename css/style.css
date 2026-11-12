@@ -199,6 +199,35 @@ html:not(.dark) .role-list-text {
   font-weight: 500 !important;
 }
 
+/* ==========================================================================
+   SOP / Tata Tertib Policy Card (High-Contrast Light Mode - Pure Black)
+   ========================================================================== */
+html:not(.dark) .sop-title-text {
+  color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+html:not(.dark) .sop-body-text {
+  color: #000000 !important;
+  font-weight: 500 !important;
+}
+
+html:not(.dark) .sop-subtitle-text {
+  color: #0f172a !important;
+}
+
+.dark .sop-title-text {
+  color: #ffffff !important;
+}
+
+.dark .sop-body-text {
+  color: #cbd5e1 !important;
+}
+
+.dark .sop-subtitle-text {
+  color: #94a3b8 !important;
+}
+
 /* Section backgrounds in Light Mode */
 html:not(.dark) .landing-section-alt {
   background-color: #f1f5f9 !important;
