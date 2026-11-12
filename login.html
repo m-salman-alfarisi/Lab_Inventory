@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIMLAB — Laboratory Inventory & Borrowing Management System</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+  <script>
+    // Theme Initializer - Default to Light Mode
+    (function() {
+      const savedTheme = localStorage.getItem('simlab_theme');
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen transition-colors duration-150">
+
+  <!-- ==================== TOAST NOTIFICATION CONTAINER ==================== -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5"></div>
+
+
+  <!-- ==================== 1. LOGIN SCREEN ==================== -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 p-4">
+    <div class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 bg-white rounded-3xl shadow-2xl overflow-hidden border border-white/10">
+      
+      <!-- Left Info Panel -->
+      <div class="lg:col-span-6 bg-gradient-to-br from-blue-600 to-indigo-800 text-white p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden">
+        <div class="relative z-10">
+          <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-sm text-xs font-semibold tracking-wide uppercase mb-6">
+            <i class="fa-solid fa-microchip"></i>
+            <span>Coding Talent Challenge</span>
+          </div>
+          <h1 class="text-2xl lg:text-3xl font-extrabold leading-tight">
+            Laboratory Inventory &amp; Borrowing Management System
+          </h1>
+          <p class="text-blue-100 text-sm mt-3 leading-relaxed">
+            Sistem pengelolaan inventaris peralatan laboratorium komputer, pemantauan ketersediaan stok secara real-time, serta pencatatan transaksi peminjaman dan pengembalian digital.
+          </p>
+
+          <div class="mt-8 space-y-3.5">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fa-solid fa-boxes-stacked text-sm"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold">Pemantauan Stok Real-Time</h4>
+                <p class="text-xs text-blue-100">Otomatis mengurangi stok saat dipinjam dan menambah stok saat dikembalikan.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fa-solid fa-user-shield text-sm"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold">Multi-Role Access Control (Admin &amp; Staff)</h4>
+                <p class="text-xs text-blue-100">Hak akses terpisah antara pengelola utama (Admin) dan petugas operasional (Staff).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative z-10 mt-8 pt-6 border-t border-white/20 flex items-center justify-between text-xs text-blue-100 font-mono">
+          <span><i class="fa-solid fa-shield-halved mr-1.5"></i>Portal Terproteksi</span>
+          <span>SIMLAB v2.4</span>
+        </div>
+      </div>
+
+      <!-- Right Login Form -->
+      <div class="lg:col-span-6 p-8 lg:p-10 flex flex-col justify-center">
+        <div class="mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/30 mb-4">
+            <i class="fa-solid fa-computer text-xl"></i>
+          </div>
+          <h2 class="text-2xl font-extrabold text-slate-900">Masuk ke Sistem</h2>
+          <p class="text-sm text-slate-500 mt-1">Masukkan kredensial akun Admin atau Staff Laboratorium Anda.</p>
+        </div>
+
+        <!-- Error Alert -->
+        <div id="login-error" class="hidden mb-5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-start gap-2.5">
+          <i class="fa-solid fa-circle-exclamation text-sm mt-0.5 shrink-0"></i>
+          <span id="login-error-text">Username atau password salah.</span>
+        </div>
+
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label for="login-username" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Username</label>
+            <div class="relative">
+              <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+              <input id="login-username" type="text" required placeholder="Contoh: admin atau staff"
+                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none text-sm transition" />
+            </div>
+          </div>
+
+          <div>
+            <label for="login-password" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Password</label>
+            <div class="relative">
+              <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+              <input id="login-password" type="password" required placeholder="Masukkan password"
+                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none text-sm transition" />
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-600/25 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Masuk Sekarang</span>
+          </button>
+        </form>
+
+        <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+          <a href="index.html" class="text-slate-600 hover:text-blue-600 font-semibold flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-arrow-left text-blue-600"></i> Kembali
+          </a>
+          <button type="button" onclick="App.handleResetSeedData()" class="text-blue-600 hover:underline font-medium">
+            Reset Data Awal
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== 2. MAIN APPLICATION SHELL ==================== -->
+  <div id="app-shell" class="hidden min-h-screen flex bg-slate-50">
+
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebar-backdrop" onclick="App.toggleMobileSidebar()" class="hidden fixed inset-0 bg-slate-900/50 z-30 lg:hidden"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out no-print">
+      <div>
+        <!-- Brand Header -->
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-600/25">
+              <i class="fa-solid fa-computer text-lg"></i>
+            </div>
+            <div>
+              <h1 class="font-extrabold text-slate-900 text-base tracking-tight leading-none">SIMLAB</h1>
+              <p class="text-[11px] text-slate-400 font-medium mt-1">Inventory &amp; Borrowing</p>
+            </div>
+          </div>
+          <button onclick="App.toggleMobileSidebar()" class="lg:hidden text-slate-400 hover:text-slate-600 p-1">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <!-- Active User Profile Card -->
+        <div class="p-4 mx-3 mt-4 rounded-2xl bg-slate-50 border border-slate-200/70">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Sesi Login Aktif</span>
+            <span id="user-role-badge" class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-indigo-100 text-indigo-700">ADMIN</span>
+          </div>
+          <div id="user-display-name" class="font-bold text-slate-800 text-sm truncate">Administrator Lab</div>
+          <div id="user-display-username" class="text-xs text-slate-400 font-mono">@admin</div>
+        </div>
+
+        <!-- Menu Links -->
+        <nav class="p-3 space-y-1 mt-2">
+          <div class="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">Menu Utama</div>
+
+          <button onclick="App.navigate('dashboard')" data-view="dashboard" class="nav-item active w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">
+            <i class="fa-solid fa-chart-pie w-5 text-center text-slate-400"></i>
+            <span>Dashboard</span>
+          </button>
+
+          <button onclick="App.navigate('inventory')" data-view="inventory" class="nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">
+            <div class="flex items-center gap-3">
+              <i class="fa-solid fa-boxes-stacked w-5 text-center text-slate-400"></i>
+              <span>Inventaris Barang</span>
+            </div>
+            <span class="staff-only-badge hidden text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-600 font-bold">Lihat</span>
+          </button>
+
+          <button onclick="App.navigate('borrowing')" data-view="borrowing" class="nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">
+            <i class="fa-solid fa-hand-holding-hand w-5 text-center text-slate-400"></i>
+            <span>Peminjaman Barang</span>
+          </button>
+
+          <button onclick="App.navigate('returning')" data-view="returning" class="nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">
+            <div class="flex items-center gap-3">
+              <i class="fa-solid fa-rotate-left w-5 text-center text-slate-400"></i>
+              <span>Pengembalian Barang</span>
+            </div>
+            <span id="nav-return-badge" class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-amber-100 text-amber-800">2</span>
+          </button>
+
+          <button onclick="App.navigate('history')" data-view="history" class="nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">
+            <i class="fa-solid fa-clock-rotate-left w-5 text-center text-slate-400"></i>
+            <span>Riwayat Transaksi</span>
+          </button>
+
+          <!-- Admin-Only Menu Section -->
+          <div class="admin-only pt-3">
+            <div class="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">Administrator</div>
+            <button onclick="App.navigate('users')" data-view="users" class="nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">
+              <i class="fa-solid fa-users-gear w-5 text-center text-slate-400"></i>
+              <span>Manajemen Pengguna</span>
+            </button>
+            <button onclick="App.openCloudModal()" type="button" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition mt-1">
+              <i class="fa-solid fa-cloud-arrow-up w-5 text-center text-slate-400"></i>
+              <span>Cloud Sync / Database</span>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Bottom Actions -->
+      <div class="p-4 border-t border-slate-100 space-y-2">
+        <button onclick="App.toggleTheme()" type="button" class="w-full py-2 px-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-xs font-semibold transition flex items-center justify-between">
+          <span class="flex items-center gap-2">
+            <i id="theme-toggle-icon-sidebar" class="fa-solid fa-moon text-slate-400"></i>
+            <span>Mode Tampilan</span>
+          </span>
+          <span id="theme-status-text" class="text-[10px] uppercase font-mono text-slate-400">Light</span>
+        </button>
+        <button onclick="App.handleResetSeedData()" type="button" class="w-full py-2 px-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-xs font-semibold transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-arrows-rotate text-slate-400"></i>
+          <span>Reset Data Awal</span>
+        </button>
+        <button onclick="App.handleLogout()" type="button" class="w-full py-2.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout / Keluar</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col min-w-0">
+
+      <!-- Top Header -->
+      <header class="bg-white border-b border-slate-200 px-4 sm:px-8 py-4 flex items-center justify-between sticky top-0 z-20 no-print">
+        <div class="flex items-center gap-3">
+          <button onclick="App.toggleMobileSidebar()" class="lg:hidden p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div>
+            <h2 id="page-title" class="text-lg sm:text-xl font-extrabold text-slate-900">Dashboard</h2>
+            <p id="page-subtitle" class="text-xs text-slate-500 hidden sm:block">Ringkasan aktivitas inventaris laboratorium</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <button onclick="App.toggleTheme()" class="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition" title="Toggle Tema">
+            <i id="theme-toggle-icon-header" class="fa-solid fa-moon text-xs"></i>
+          </button>
+          <button onclick="App.navigate('borrowing')" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition">
+            <i class="fa-solid fa-plus"></i>
+            <span>Pinjam Barang</span>
+          </button>
+          <button onclick="App.handleLogout()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 text-xs font-semibold transition">
+            <i class="fa-solid fa-power-off"></i>
+            <span class="hidden sm:inline">Keluar</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <main class="p-4 sm:p-8 flex-1 space-y-6 max-w-7xl w-full mx-auto">
+
+        <!-- ==================== VIEW 1: DASHBOARD ==================== -->
+        <section id="view-dashboard" class="view-section space-y-6">
+          <!-- Role Welcome Banner -->
+          <div id="dashboard-role-info"></div>
+
+          <!-- 4 Required KPI Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Total Barang -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start justify-between">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Barang</p>
+                <h3 id="stat-total-items" class="text-3xl font-extrabold text-slate-900 mt-1">12</h3>
+                <p id="stat-total-units-sub" class="text-xs text-slate-500 mt-1.5">84 total unit fisik</p>
+              </div>
+              <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg shrink-0">
+                <i class="fa-solid fa-boxes-stacked"></i>
+              </div>
+            </div>
+
+            <!-- Jumlah Barang Tersedia -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start justify-between">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Barang Tersedia</p>
+                <h3 id="stat-available-items" class="text-3xl font-extrabold text-emerald-600 mt-1">81</h3>
+                <p id="stat-available-sub" class="text-xs text-slate-500 mt-1.5">Siap dipinjam saat ini</p>
+              </div>
+              <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg shrink-0">
+                <i class="fa-solid fa-box-check"></i>
+              </div>
+            </div>
+
+            <!-- Jumlah Barang Dipinjam -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start justify-between">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Barang Dipinjam</p>
+                <h3 id="stat-borrowed-items" class="text-3xl font-extrabold text-amber-600 mt-1">3</h3>
+                <p id="stat-borrowed-sub" class="text-xs text-slate-500 mt-1.5">2 transaksi sedang berjalan</p>
+              </div>
+              <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg shrink-0">
+                <i class="fa-solid fa-hand-holding-hand"></i>
+              </div>
+            </div>
+
+            <!-- Total Transaksi Peminjaman -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start justify-between">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Transaksi</p>
+                <h3 id="stat-total-trx" class="text-3xl font-extrabold text-indigo-600 mt-1">4</h3>
+                <p id="stat-total-trx-sub" class="text-xs text-slate-500 mt-1.5">2 selesai • 2 aktif</p>
+              </div>
+              <div class="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg shrink-0">
+                <i class="fa-solid fa-file-invoice"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle Grid: Stock Overview & Recent Activities -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Status Ketersediaan Barang Utama -->
+            <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col">
+              <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                  <h3 class="font-bold text-slate-800 text-base">Status Ketersediaan Inventaris Utama</h3>
+                  <p class="text-xs text-slate-400">Daftar cepat stok peralatan laboratorium komputer</p>
+                </div>
+                <button onclick="App.navigate('inventory')" class="text-xs font-semibold text-blue-600 hover:underline">
+                  Lihat Semua <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+              <div class="overflow-x-auto flex-1">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-slate-50/80 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+                      <th class="px-4 py-3">Kode</th>
+                      <th class="px-4 py-3">Nama Barang</th>
+                      <th class="px-4 py-3 text-center">Tersedia</th>
+                      <th class="px-4 py-3 text-center">Dipinjam</th>
+                      <th class="px-4 py-3 text-right">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboard-stock-tbody" class="divide-y divide-slate-100"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Ringkasan Aktivitas Terbaru -->
+            <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 flex flex-col">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div>
+                  <h3 class="font-bold text-slate-800 text-base">Ringkasan Aktivitas Terbaru</h3>
+                  <p class="text-xs text-slate-400">Log real-time operasional laboratorium</p>
+                </div>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              </div>
+              <div id="dashboard-activity-list" class="mt-2 divide-y divide-slate-100 overflow-y-auto max-h-96"></div>
+            </div>
+          </div>
+
+          <!-- Transaksi Peminjaman Terbaru -->
+          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h3 class="font-bold text-slate-800 text-base">Transaksi Peminjaman &amp; Pengembalian Terbaru</h3>
+                <p class="text-xs text-slate-400">5 transaksi terakhir yang tercatat di sistem</p>
+              </div>
+              <button onclick="App.navigate('history')" class="text-xs font-semibold text-blue-600 hover:underline">
+                Riwayat Lengkap <i class="fa-solid fa-arrow-right ml-1"></i>
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50/80 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+                    <th class="px-4 py-3">ID Transaksi</th>
+                    <th class="px-4 py-3">Peminjam</th>
+                    <th class="px-4 py-3">Barang</th>
+                    <th class="px-4 py-3 text-center">Jumlah</th>
+                    <th class="px-4 py-3">Tgl Pinjam</th>
+                    <th class="px-4 py-3 text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboard-recent-trx-tbody" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 2: MANAJEMEN BARANG (INVENTORY) ==================== -->
+        <section id="view-inventory" class="view-section hidden space-y-6">
+          <!-- Staff Notice Banner -->
+          <div class="staff-only-badge hidden p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-solid fa-circle-info text-base text-emerald-600"></i>
+              <span><strong>Mode Petugas Staff:</strong> Anda dapat melihat daftar barang, memantau ketersediaan stok, dan langsung meminjamkan barang. Penambahan, perubahan, dan penghapusan barang hanya dapat dilakukan oleh <strong>Admin</strong>.</span>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+              <div class="flex flex-1 flex-col sm:flex-row gap-3">
+                <!-- Search Input -->
+                <div class="relative flex-1">
+                  <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                  <input id="inv-search" type="text" placeholder="Cari kode (BR001), nama barang, kategori, atau lokasi rak..."
+                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none text-sm" />
+                </div>
+
+                <!-- Filter Category -->
+                <select id="inv-filter-category" class="px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-700 outline-none focus:border-blue-600 bg-white">
+                  <option value="ALL">Semua Kategori</option>
+                </select>
+
+                <!-- Filter Stock Status -->
+                <select id="inv-filter-status" class="px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-700 outline-none focus:border-blue-600 bg-white">
+                  <option value="ALL">Semua Status Stok</option>
+                  <option value="AVAILABLE">Tersedia (&gt; 0)</option>
+                  <option value="LOW">Stok Menipis (1 - 3)</option>
+                  <option value="EMPTY">Stok Habis (0)</option>
+                </select>
+              </div>
+
+              <!-- Add Item Button (ADMIN ONLY) -->
+              <div class="admin-only shrink-0">
+                <button onclick="App.openItemModal()" class="w-full md:w-auto px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-plus"></i>
+                  <span>Tambah Barang Baru</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="py-3 flex items-center justify-between text-xs text-slate-500">
+              <span id="inv-count-label">Menampilkan peralatan laboratorium</span>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-y border-slate-100">
+                    <th class="px-4 py-3">Kode</th>
+                    <th class="px-4 py-3">Nama Barang</th>
+                    <th class="px-4 py-3 hidden md:table-cell">Kategori</th>
+                    <th class="px-4 py-3 hidden lg:table-cell">Lokasi &amp; Kondisi</th>
+                    <th class="px-4 py-3 text-center">Stok Tersedia</th>
+                    <th class="px-4 py-3 text-center hidden sm:table-cell">Dipinjam</th>
+                    <th class="px-4 py-3 text-center">Status</th>
+                    <th class="px-4 py-3 text-right">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 3: MANAJEMEN PEMINJAMAN ==================== -->
+        <section id="view-borrowing" class="view-section hidden space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- Form Input Peminjaman -->
+            <div class="lg:col-span-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 h-fit">
+              <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-5">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <i class="fa-solid fa-file-circle-plus text-lg"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-800 text-base">Form Peminjaman Barang</h3>
+                  <p class="text-xs text-slate-400">Stok otomatis berkurang saat disimpan</p>
+                </div>
+              </div>
+
+              <form id="borrow-form" class="space-y-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Nama Peminjam (Mahasiswa / Dosen) *</label>
+                  <input id="borrower-name" type="text" required placeholder="Contoh: Budi Hartono (NIM: 230101015)"
+                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none text-sm" />
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">No. HP / Kontak</label>
+                    <input id="borrower-contact" type="text" placeholder="0812xxxx"
+                      class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Tanggal Pinjam *</label>
+                    <input id="borrow-date" type="date" required
+                      class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Pilih Barang *</label>
+                  <select id="borrow-item-id" required
+                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm bg-white">
+                    <option value="">-- Pilih Peralatan Laboratorium --</option>
+                  </select>
+                  <p id="borrow-stock-helper" class="text-xs text-slate-400 mt-1">Pilih barang terlebih dahulu untuk melihat batas stok.</p>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Jumlah Barang Dipinjam *</label>
+                  <input id="borrow-quantity" type="number" min="1" value="1" required
+                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm font-bold" />
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Keperluan / Mata Kuliah</label>
+                  <input id="borrow-purpose" type="text" placeholder="Contoh: Praktikum Jaringan Komputer"
+                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 outline-none text-sm" />
+                </div>
+
+                <button type="submit" class="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-600/20 transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-floppy-disk"></i>
+                  <span>Simpan Transaksi Peminjaman</span>
+                </button>
+              </form>
+            </div>
+
+            <!-- Daftar Transaksi Peminjaman -->
+            <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 flex flex-col">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 mb-4">
+                <div>
+                  <h3 class="font-bold text-slate-800 text-base">Daftar &amp; Status Transaksi Peminjaman</h3>
+                  <p class="text-xs text-slate-400">Pantau seluruh peminjaman aktif maupun yang telah dikembalikan</p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input id="borrow-search" type="text" placeholder="Cari peminjam / barang..."
+                      class="pl-8 pr-3 py-2 rounded-xl border border-slate-200 text-xs outline-none focus:border-blue-600" />
+                  </div>
+                  <select id="borrow-filter-status" class="px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white outline-none focus:border-blue-600">
+                    <option value="ALL">Semua Status</option>
+                    <option value="Dipinjam">Sedang Dipinjam</option>
+                    <option value="Selesai">Selesai</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto flex-1">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-y border-slate-100">
+                      <th class="px-4 py-3">ID &amp; Petugas</th>
+                      <th class="px-4 py-3">Peminjam</th>
+                      <th class="px-4 py-3">Barang</th>
+                      <th class="px-4 py-3 text-center">Jumlah</th>
+                      <th class="px-4 py-3">Tanggal</th>
+                      <th class="px-4 py-3 text-center">Status</th>
+                      <th class="px-4 py-3 text-right">Tindakan</th>
+                    </tr>
+                  </thead>
+                  <tbody id="borrow-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 4: PENGEMBALIAN BARANG ==================== -->
+        <section id="view-returning" class="view-section hidden space-y-6">
+          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+              <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold mb-2">
+                  <i class="fa-solid fa-clock"></i>
+                  <span id="return-active-summary">Transaksi Aktif</span>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg">Daftar Barang yang Sedang Dipinjam</h3>
+                <p class="text-xs text-slate-500">Klik tombol <strong>Proses Pengembalian</strong> untuk mengembalikan stok barang dan mengubah status transaksi menjadi <strong>Selesai</strong>.</p>
+              </div>
+
+              <div class="relative w-full md:w-80">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input id="return-search" type="text" placeholder="Cari nama peminjam, ID, atau barang..."
+                  class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-blue-600" />
+              </div>
+            </div>
+
+            <div class="overflow-x-auto mt-4">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-y border-slate-100">
+                    <th class="px-4 py-3">ID Transaksi</th>
+                    <th class="px-4 py-3">Nama Peminjam</th>
+                    <th class="px-4 py-3">Barang Dipinjam</th>
+                    <th class="px-4 py-3 text-center">Jumlah</th>
+                    <th class="px-4 py-3">Tanggal Pinjam</th>
+                    <th class="px-4 py-3 text-center">Status</th>
+                    <th class="px-4 py-3 text-right">Aksi Pengembalian</th>
+                  </tr>
+                </thead>
+                <tbody id="return-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 5: RIWAYAT PEMINJAMAN & PENGEMBALIAN ==================== -->
+        <section id="view-history" class="view-section hidden space-y-6">
+          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+              <div class="flex flex-1 flex-col sm:flex-row gap-3">
+                <div class="relative flex-1">
+                  <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                  <input id="history-search" type="text" placeholder="Cari ID transaksi, peminjam, kode barang, atau petugas..."
+                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-blue-600" />
+                </div>
+                <select id="history-filter-status" class="px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white outline-none focus:border-blue-600">
+                  <option value="ALL">Semua Status Transaksi</option>
+                  <option value="Dipinjam">Sedang Dipinjam</option>
+                  <option value="Selesai">Selesai Dikembalikan</option>
+                </select>
+              </div>
+
+              <div class="flex items-center gap-2 shrink-0">
+                <button onclick="App.exportTransactionsCSV()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition flex items-center gap-2">
+                  <i class="fa-solid fa-file-csv"></i>
+                  <span>Export CSV</span>
+                </button>
+                <button onclick="window.print()" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center gap-2">
+                  <i class="fa-solid fa-print"></i>
+                  <span>Cetak</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto mt-4">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-y border-slate-100">
+                    <th class="px-4 py-3">ID Transaksi</th>
+                    <th class="px-4 py-3">Peminjam</th>
+                    <th class="px-4 py-3">Barang</th>
+                    <th class="px-4 py-3 text-center">Unit</th>
+                    <th class="px-4 py-3">Tgl Pinjam</th>
+                    <th class="px-4 py-3">Tgl Kembali</th>
+                    <th class="px-4 py-3">Petugas &amp; Catatan</th>
+                    <th class="px-4 py-3 text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="history-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 6: MANAJEMEN PENGGUNA (ADMIN ONLY) ==================== -->
+        <section id="view-users" class="view-section hidden space-y-6">
+          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+              <div class="relative flex-1 max-w-md">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input id="user-search" type="text" placeholder="Cari nama pengguna, username, atau email..."
+                  class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-blue-600" />
+              </div>
+
+              <button onclick="App.openUserModal()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-600/20 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Tambah Akun Staff Baru</span>
+              </button>
+            </div>
+
+            <div class="overflow-x-auto mt-4">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-y border-slate-100">
+                    <th class="px-4 py-3">Nama Lengkap &amp; Kontak</th>
+                    <th class="px-4 py-3">Username</th>
+                    <th class="px-4 py-3">Password Demo</th>
+                    <th class="px-4 py-3 text-center">Role</th>
+                    <th class="px-4 py-3 text-center">Status Akun</th>
+                    <th class="px-4 py-3 text-right">Aksi Pengelolaan</th>
+                  </tr>
+                </thead>
+                <tbody id="users-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 1: TAMBAH / EDIT BARANG (ADMIN) ==================== -->
+  <div id="item-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 modal-backdrop p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden">
+      <div class="px-6 py-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+        <h3 id="item-modal-title" class="font-bold text-slate-800 text-base">Tambah Barang Inventaris</h3>
+        <button onclick="App.closeItemModal()" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="item-modal-form" class="p-6 space-y-4">
+        <input type="hidden" id="item-modal-id" />
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Kode Barang *</label>
+            <input id="item-modal-code" type="text" required placeholder="BR006"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-mono text-sm font-bold uppercase focus:border-blue-600 outline-none" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Nama Barang *</label>
+            <input id="item-modal-name" type="text" required placeholder="Contoh: Laptop Lenovo ThinkPad"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-600 outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Kategori *</label>
+            <select id="item-modal-category" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:border-blue-600 outline-none">
+              <option value="Laptop">Laptop</option>
+              <option value="Periferal">Periferal</option>
+              <option value="Proyektor">Proyektor</option>
+              <option value="Monitor">Monitor</option>
+              <option value="Perangkat Jaringan">Perangkat Jaringan</option>
+              <option value="Aksesoris">Aksesoris</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Jumlah Stok Tersedia *</label>
+            <input id="item-modal-stock" type="number" min="0" required
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-bold focus:border-blue-600 outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Lokasi Penyimpanan</label>
+            <input id="item-modal-location" type="text" placeholder="Contoh: Rak A-01"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-600 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Kondisi Fisik</label>
+            <select id="item-modal-condition" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:border-blue-600 outline-none">
+              <option value="Baik">Baik</option>
+              <option value="Sangat Baik">Sangat Baik</option>
+              <option value="Perlu Perawatan">Perlu Perawatan</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="App.closeItemModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md shadow-blue-600/20">
+            <i class="fa-solid fa-check mr-1"></i> Simpan Data Barang
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: KONFIRMASI HAPUS BARANG (ADMIN) ==================== -->
+  <div id="delete-item-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 modal-backdrop p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md p-6 text-center">
+      <div class="w-14 h-14 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4 text-2xl">
+        <i class="fa-solid fa-trash-can"></i>
+      </div>
+      <h3 class="text-lg font-extrabold text-slate-900">Hapus Data Barang?</h3>
+      <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+        Anda yakin ingin menghapus <strong id="delete-item-name" class="text-slate-800"></strong> dari daftar inventaris laboratorium? Tindakan ini tidak dapat dibatalkan.
+      </p>
+      <div class="mt-6 flex items-center justify-center gap-3">
+        <button type="button" onclick="App.closeDeleteItemModal()" class="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50">
+          Batal
+        </button>
+        <button type="button" onclick="App.executeDeleteItem()" class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md shadow-rose-600/20">
+          Ya, Hapus Barang
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 3: PROSES PENGEMBALIAN BARANG ==================== -->
+  <div id="return-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 modal-backdrop p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden">
+      <div class="px-6 py-4 bg-emerald-600 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid fa-rotate-left"></i>
+          <h3 class="font-bold text-base">Konfirmasi Pengembalian Barang</h3>
+        </div>
+        <button onclick="App.closeReturnModal()" class="text-white/80 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="return-modal-form" class="p-6 space-y-4">
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
+          <div class="flex justify-between">
+            <span class="text-slate-400">ID Transaksi:</span>
+            <span id="return-modal-trx-id" class="font-mono font-bold text-slate-800"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Nama Peminjam:</span>
+            <span id="return-modal-borrower" class="font-bold text-slate-800"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Barang Dipinjam:</span>
+            <span id="return-modal-item" class="font-bold text-blue-600"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Jumlah Dikembalikan:</span>
+            <span id="return-modal-qty" class="font-extrabold text-emerald-600"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Tanggal Pinjam:</span>
+            <span id="return-modal-borrow-date" class="font-medium text-slate-700"></span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Tanggal Dikembalikan *</label>
+          <input id="return-modal-date" type="date" required
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-emerald-600 outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Catatan Kondisi Pengembalian</label>
+          <input id="return-modal-note" type="text" placeholder="Contoh: Dikembalikan lengkap dalam kondisi baik"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-emerald-600 outline-none" />
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="App.closeReturnModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Selesaikan Pengembalian &amp; Tambah Stok</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 4: TAMBAH / EDIT PENGGUNA (ADMIN) ==================== -->
+  <div id="user-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 modal-backdrop p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden">
+      <div class="px-6 py-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+        <h3 id="user-modal-title" class="font-bold text-slate-800 text-base">Tambah Akun Staff Baru</h3>
+        <button onclick="App.closeUserModal()" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="user-modal-form" class="p-6 space-y-4">
+        <input type="hidden" id="user-modal-id" />
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Nama Lengkap Petugas *</label>
+          <input id="user-modal-name" type="text" required placeholder="Contoh: Rina Wijaya"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-indigo-600 outline-none" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Username Login *</label>
+            <input id="user-modal-username" type="text" required placeholder="rina"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-mono text-sm focus:border-indigo-600 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Password *</label>
+            <input id="user-modal-password" type="text" required placeholder="password123"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-mono text-sm focus:border-indigo-600 outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Email</label>
+            <input id="user-modal-email" type="email" placeholder="rina@labkomputer.ac.id"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-indigo-600 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">No. Telepon</label>
+            <input id="user-modal-phone" type="text" placeholder="0812-xxxx-xxxx"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-indigo-600 outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Role Hak Akses *</label>
+            <select id="user-modal-role" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:border-indigo-600 outline-none">
+              <option value="STAFF">STAFF (Operasional Lab)</option>
+              <option value="ADMIN">ADMIN (Pengelola Utama)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Status Akun *</label>
+            <select id="user-modal-active" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:border-indigo-600 outline-none">
+              <option value="true">Aktif (Dapat Login)</option>
+              <option value="false">Nonaktif (Akses Diblokir)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="App.closeUserModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-600/20">
+            <i class="fa-solid fa-check mr-1"></i> Simpan Akun Pengguna
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 5: KONFIGURASI SUPABASE CLOUD SYNC ==================== -->
+  <div id="cloud-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 modal-backdrop p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden">
+      <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i>
+          <h3 class="font-bold text-base">Penyimpanan &amp; Integrasi Supabase Cloud</h3>
+        </div>
+        <button onclick="App.closeCloudModal()" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="cloud-modal-form" class="p-6 space-y-4">
+        <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-800 leading-relaxed">
+          <strong>Mode Hybrid Persistence Aktif:</strong> Secara default seluruh perubahan data tersimpan otomatis di browser (tetap tersimpan meskipun browser ditutup). Anda juga dapat mengaktifkan sinkronisasi ke database cloud <strong>Supabase</strong> di bawah ini.
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Supabase Project URL</label>
+          <input id="cloud-url" type="url" placeholder="https://xxxx.supabase.co"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-mono outline-none focus:border-blue-600" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Supabase Anon Public Key</label>
+          <input id="cloud-key" type="password" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI..."
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-mono outline-none focus:border-blue-600" />
+        </div>
+
+        <label class="flex items-center gap-2.5 cursor-pointer pt-1">
+          <input id="cloud-enabled" type="checkbox" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+          <span class="text-xs font-semibold text-slate-700">Aktifkan sinkronisasi otomatis ke Supabase Cloud</span>
+        </label>
+
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="App.closeCloudModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50">
+            Tutup
+          </button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md">
+            Simpan Konfigurasi
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

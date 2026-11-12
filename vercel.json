@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "name": "lab-inventory-system",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

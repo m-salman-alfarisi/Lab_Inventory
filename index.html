@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIMLAB — Laboratory Inventory &amp; Borrowing Management System</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+  <script>
+    // Theme Initializer - Default to Light Mode
+    (function() {
+      const savedTheme = localStorage.getItem('simlab_theme');
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+</head>
+<body class="landing-page bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-600 selection:text-white overflow-x-hidden bg-grid-slate transition-colors duration-200">
+
+  <!-- ==================== 1. STICKY GLASSMORPHIC NAVBAR ==================== -->
+  <header class="fixed top-0 inset-x-0 z-50 transition-colors duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Brand Identity -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 dark:bg-gradient-to-br dark:from-blue-600 dark:to-indigo-600 text-white flex items-center justify-center shadow-md shadow-blue-600/20 group-hover:scale-105 transition duration-200">
+          <i class="fa-solid fa-computer text-lg"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg tracking-tight">SIMLAB</span>
+            <span class="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider rounded-full bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30">v2.4 Cloud</span>
+          </div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">Laboratory Inventory &amp; Borrowing System</p>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold">
+        <a href="#fitur" class="hover:text-blue-600 dark:hover:text-white transition">Fitur Unggulan</a>
+        <a href="#katalog" class="hover:text-blue-600 dark:hover:text-white transition flex items-center gap-1.5">
+          <span>Cek Stok Live</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        </a>
+        <a href="#alur" class="hover:text-blue-600 dark:hover:text-white transition">Alur Peminjaman</a>
+        <a href="#role" class="hover:text-blue-600 dark:hover:text-white transition">Role &amp; Akses</a>
+      </nav>
+
+      <!-- CTA Button & Theme Toggle -->
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <button id="landing-theme-toggle" type="button" onclick="toggleLandingTheme()" title="Ubah Tema" class="w-10 h-10 rounded-xl bg-white dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/20 border border-slate-200 dark:border-white/15 text-slate-700 dark:text-slate-300 flex items-center justify-center transition shadow-sm">
+          <i id="theme-toggle-icon-landing" class="fa-solid fa-moon text-sm"></i>
+        </button>
+        <a href="login.html" class="btn-primary-glow px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition inline-flex items-center gap-2">
+          <span class="text-white font-extrabold tracking-wide">Masuk Sistem</span>
+          <i class="fa-solid fa-arrow-right text-xs text-white"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 2. HERO SECTION ==================== -->
+  <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+
+        <!-- Left Column -->
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/25 text-emerald-800 dark:text-emerald-300 text-xs font-semibold">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span>Real-Time Lab Inventory &amp; Borrowing System</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-[3.3rem] font-extrabold tracking-tight leading-[1.15]">
+            Transformasi Digital Inventaris &amp; Peminjaman <span class="hero-headline-gradient">Laboratorium Komputer.</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-700 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+            Gantikan buku log manual yang rawan selisih. Pantau ketersediaan laptop, proyektor, monitor, hingga perangkat jaringan secara real-time dengan mutasi stok otomatis dan pemisahan otorisasi <strong>Admin</strong> &amp; <strong>Staff</strong>.
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+            <a href="login.html" class="btn-primary-glow w-full sm:w-auto px-7 py-3.5 rounded-xl font-bold text-sm transition flex items-center justify-center gap-2.5">
+              <i class="fa-solid fa-right-to-bracket text-white"></i>
+              <span class="text-white font-extrabold">Buka Aplikasi Sistem</span>
+            </a>
+            <a href="#katalog" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/15 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold text-sm transition flex items-center justify-center gap-2.5 shadow-sm">
+              <i class="fa-solid fa-boxes-stacked text-blue-600 dark:text-blue-400"></i>
+              <span>Cek Ketersediaan Barang</span>
+            </a>
+          </div>
+
+          <!-- 3 Key Metrics -->
+          <div class="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200 dark:border-white/10 max-w-xl mx-auto lg:mx-0">
+            <div>
+              <div id="lp-stat-sku" class="text-2xl sm:text-3xl font-extrabold font-mono tabular-nums text-slate-900 dark:text-white">12 Jenis</div>
+              <div class="text-xs text-slate-600 dark:text-slate-400 mt-0.5 font-semibold">Total Jenis Alat Lab</div>
+            </div>
+            <div>
+              <div id="lp-stat-units" class="text-2xl sm:text-3xl font-extrabold text-emerald-700 dark:text-emerald-400 font-mono tabular-nums">84 Unit</div>
+              <div class="text-xs text-slate-600 dark:text-slate-400 mt-0.5 font-semibold">Total Unit Terlacak</div>
+            </div>
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-blue-700 dark:text-blue-400 font-mono tabular-nums">100%</div>
+              <div class="text-xs text-slate-600 dark:text-slate-400 mt-0.5 font-semibold">Sinkronisasi Otomatis</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column (Interactive UI Mockup) -->
+        <div class="lg:col-span-5">
+          <div class="landing-mockup-wrapper rounded-3xl p-5 backdrop-blur-xl relative">
+            <div class="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-200 dark:border-white/10">
+              <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+              </div>
+              <div class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-950/90 border border-slate-200 dark:border-white/10 text-[11px] font-mono text-slate-700 dark:text-slate-400 flex items-center gap-1.5 font-semibold">
+                <i class="fa-solid fa-lock text-emerald-600 dark:text-emerald-400 text-[10px]"></i>
+                <span>simlab.app/live-monitor</span>
+              </div>
+              <span class="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-emerald-700 dark:text-emerald-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>LIVE
+              </span>
+            </div>
+
+            <!-- Dual KPI inside Mockup -->
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <div class="landing-mockup-inner p-3.5 rounded-2xl">
+                <div class="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 font-bold">
+                  <span>Stok Tersedia</span>
+                  <i class="fa-solid fa-box-check text-emerald-600 dark:text-emerald-400"></i>
+                </div>
+                <div id="lp-mock-available" class="text-2xl font-black font-mono tabular-nums mt-1 text-emerald-700 dark:text-emerald-400">81 Unit</div>
+                <div class="text-[11px] text-emerald-800 dark:text-emerald-400 font-bold mt-0.5">Siap dipinjam saat ini</div>
+              </div>
+              <div class="landing-mockup-inner p-3.5 rounded-2xl">
+                <div class="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 font-bold">
+                  <span>Sedang Dipinjam</span>
+                  <i class="fa-solid fa-hand-holding-hand text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <div id="lp-mock-borrowed" class="text-2xl font-black font-mono tabular-nums mt-1 text-amber-700 dark:text-amber-400">3 Unit</div>
+                <div id="lp-mock-trx-count" class="text-[11px] text-amber-800 dark:text-amber-400 font-bold mt-0.5">2 transaksi aktif</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-2.5 px-1">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">Data Awal Wajib (BR001–BR005)</span>
+              <span class="text-[11px] font-mono text-blue-700 dark:text-blue-400 font-bold">Real-Time State</span>
+            </div>
+
+            <div id="lp-mini-items" class="space-y-2"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. BENTO GRID FEATURES ==================== -->
+  <section id="fitur" class="landing-section-alt py-20 border-y transition-colors duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/25 text-xs font-bold uppercase tracking-widest text-blue-700 dark:text-blue-400">Arsitektur Fitur</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold mt-3 tracking-tight">Dirancang untuk Presisi Operasional Lab</h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-3">Menjawab seluruh kebutuhan pengelolaan inventaris dan sirkulasi peminjaman alat laboratorium secara end-to-end.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bento-card p-7 rounded-3xl flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-500/15 border border-blue-200 dark:border-blue-500/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl mb-5 shadow-sm">
+              <i class="fa-solid fa-boxes-stacked"></i>
+            </div>
+            <h3 class="text-xl font-bold">Manajemen Inventaris &amp; Stok</h3>
+            <p class="bento-card-desc text-sm mt-2.5 leading-relaxed">
+              Pencatatan terstruktur meliputi Kode Barang (<code class="font-bold text-blue-600 dark:text-blue-300 font-mono">BR001</code> s/d <code class="font-bold text-blue-600 dark:text-blue-300 font-mono">BR012</code>), Nama Perangkat, Kategori, Lokasi Rak, dan indikator ketersediaan otomatis.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-mono font-semibold">
+            <span class="px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 font-bold">● Tersedia</span>
+            <span class="px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30 font-bold">● Menipis</span>
+            <span class="px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-500/15 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 font-bold">● Habis</span>
+          </div>
+        </div>
+
+        <div class="bento-card p-7 rounded-3xl flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl mb-5 shadow-sm">
+              <i class="fa-solid fa-arrows-rotate"></i>
+            </div>
+            <h3 class="text-xl font-bold">Mutasi Stok Otomatis</h3>
+            <p class="bento-card-desc text-sm mt-2.5 leading-relaxed">
+              Validasi ketat mencegah peminjaman melebihi stok. Saat dipinjam stok otomatis berkurang, dan saat dikembalikan stok otomatis bertambah kembali.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-mono font-bold">
+            <span class="text-amber-800 dark:text-amber-400 font-extrabold">Pinjam: Stok - N</span>
+            <i class="fa-solid fa-arrow-right-arrow-left text-slate-400"></i>
+            <span class="text-emerald-800 dark:text-emerald-400 font-extrabold">Kembali: Stok + N</span>
+          </div>
+        </div>
+
+        <div class="bento-card p-7 rounded-3xl flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200 dark:border-indigo-500/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl mb-5 shadow-sm">
+              <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <h3 class="text-xl font-bold">Otorisasi Multi-Role Ketat</h3>
+            <p class="bento-card-desc text-sm mt-2.5 leading-relaxed">
+              Proteksi berlapis pada antarmuka dan fungsi: Staff hanya dapat mengelola sirkulasi operasional tanpa bisa menghapus barang atau mengakses menu Admin.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-mono">
+            <span class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-500/20 text-indigo-800 dark:text-indigo-300 font-bold border border-indigo-200 dark:border-transparent">ADMIN: Full CRUD</span>
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-transparent">STAFF: Ops Only</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4. LIVE CATALOG PREVIEW ==================== -->
+  <section id="katalog" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+        <div>
+          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span>Live Public Inventory Catalog</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mt-2 tracking-tight">Katalog &amp; Ketersediaan Alat Lab</h2>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Terhubung langsung dengan data inventaris. Perubahan stok di dashboard langsung tercermin di sini.</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+          <div class="relative sm:w-64">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input id="lp-catalog-search" type="text" placeholder="Cari kode BR001 atau nama alat..."
+              class="w-full pl-9 pr-4 py-2.5 rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500 transition" />
+          </div>
+          <select id="lp-catalog-category" class="px-3.5 py-2.5 rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500 transition font-medium">
+            <option value="ALL">Semua Kategori</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="lp-catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. 4-STEP OPERATIONAL WORKFLOW ==================== -->
+  <section id="alur" class="landing-section-alt py-20 border-t transition-colors duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/25 text-xs font-bold uppercase tracking-widest text-blue-700 dark:text-blue-400">Standard Operating Procedure</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold mt-3 tracking-tight">4 Langkah Sirkulasi Peminjaman</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">Alur kerja terstandarisasi dari autentikasi petugas hingga pengembalian stok otomatis.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="bento-card p-6 rounded-3xl relative">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 font-mono text-xs font-bold border border-blue-200 dark:border-transparent">STEP 01</span>
+            <i class="fa-solid fa-right-to-bracket text-slate-400 text-lg"></i>
+          </div>
+          <h4 class="font-bold text-base">Login Sesuai Role</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+            Petugas masuk sebagai <strong>Admin</strong> atau <strong>Staff</strong>. Sistem memverifikasi status keaktifan akun secara instan.
+          </p>
+        </div>
+
+        <div class="bento-card p-6 rounded-3xl relative">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 font-mono text-xs font-bold border border-blue-200 dark:border-transparent">STEP 02</span>
+            <i class="fa-solid fa-magnifying-glass-chart text-slate-400 text-lg"></i>
+          </div>
+          <h4 class="font-bold text-base">Cek &amp; Pilih Alat</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+            Cari alat berdasarkan kode atau kategori. Sistem membatasi kuota input agar tidak melebihi stok yang tersedia.
+          </p>
+        </div>
+
+        <div class="bento-card p-6 rounded-3xl relative">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 font-mono text-xs font-bold border border-amber-200 dark:border-transparent">STEP 03</span>
+            <i class="fa-solid fa-hand-holding-hand text-slate-400 text-lg"></i>
+          </div>
+          <h4 class="font-bold text-base">Catat Peminjaman</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+            Simpan nama peminjam, jumlah unit, dan tanggal pinjam. Stok barang otomatis berkurang dan berstatus <strong>Dipinjam</strong>.
+          </p>
+        </div>
+
+        <div class="bento-card p-6 rounded-3xl relative">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-200 dark:border-transparent">STEP 04</span>
+            <i class="fa-solid fa-circle-check text-slate-400 text-lg"></i>
+          </div>
+          <h4 class="font-bold text-base">Proses Pengembalian</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+            Verifikasi barang kembali dengan 1 klik. Stok otomatis bertambah kembali dan status transaksi berubah menjadi <strong>Selesai</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. ROLE & ACCESS CONTROL ==================== -->
+  <section id="role" class="py-20 border-t border-slate-200 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/25 text-xs font-bold uppercase tracking-widest text-indigo-700 dark:text-indigo-400">Role-Based Access Control</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold mt-3 tracking-tight">Matriks Hak Akses Pengguna</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">Pemisahan wewenang operasional antara <strong>Admin</strong> dan <strong>Staff</strong> untuk keamanan data laboratorium.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Card Role 1: ADMIN -->
+        <div class="bento-card p-8 rounded-3xl flex flex-col justify-between border-indigo-200 dark:border-indigo-500/30">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 text-xs font-bold">
+                <i class="fa-solid fa-shield-halved"></i> ROLE 1: ADMIN
+              </span>
+              <span class="text-xs font-mono text-indigo-700 dark:text-indigo-300 font-bold">Full Access Control</span>
+            </div>
+            <h3 class="text-2xl font-extrabold">Pengelola Utama Sistem</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Memiliki otoritas penuh atas master data barang, pemantauan seluruh transaksi, dan manajemen akun Staff.</p>
+
+            <ul class="mt-6 space-y-3.5 text-sm role-list-text">
+              <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-indigo-600 dark:text-indigo-400 mt-0.5 text-base shrink-0"></i> <span>Melihat dashboard analitik seluruh aktivitas laboratorium</span></li>
+              <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-indigo-600 dark:text-indigo-400 mt-0.5 text-base shrink-0"></i> <span><strong>Tambah, Edit, dan Hapus</strong> data barang inventaris</span></li>
+              <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-indigo-600 dark:text-indigo-400 mt-0.5 text-base shrink-0"></i> <span>Mencatat peminjaman, memproses pengembalian, &amp; unduh laporan CSV</span></li>
+              <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-indigo-600 dark:text-indigo-400 mt-0.5 text-base shrink-0"></i> <span><strong>Menambah, mengubah, &amp; mengaktifkan/menonaktifkan akun Staff</strong></span></li>
+            </ul>
+          </div>
+
+          <div class="mt-8 pt-5 border-t border-slate-100 dark:border-white/10 flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-lock text-slate-400"></i> Akses Khusus Administrator
+            </span>
+            <a href="login.html" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition text-center inline-flex items-center gap-1.5">
+              <span>Masuk Portal Admin</span>
+              <i class="fa-solid fa-arrow-right text-[11px]"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card Role 2: STAFF -->
+        <div class="bento-card p-8 rounded-3xl flex flex-col justify-between border-emerald-200 dark:border-emerald-500/30">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-xs font-bold">
+                <i class="fa-solid fa-user-check"></i> ROLE 2: STAFF
+              </span>
+              <span class="text-xs font-mono text-emerald-700 dark:text-emerald-300 font-bold">Operational Access</span>
+            </div>
+            <h3 class="text-2xl font-extrabold">Petugas Operasional Laboratorium</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Fokus melayani sirkulasi harian peminjaman dan pengembalian alat tanpa risiko mengubah master data.</p>
+
+            <ul class="mt-6 space-y-3.5 text-sm role-list-text">
+              <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400 mt-0.5 text-base shrink-0"></i> <span>Melihat daftar barang &amp; status ketersediaan stok secara real-time</span></li>
+              <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400 mt-0.5 text-base shrink-0"></i> <span>Mencatat transaksi peminjaman barang laboratorium</span></li>
+              <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400 mt-0.5 text-base shrink-0"></i> <span>Memproses pengembalian barang &amp; melihat riwayat transaksi</span></li>
+              <li class="flex items-start gap-3 text-slate-500"><i class="fa-solid fa-ban text-rose-500 mt-0.5 text-base shrink-0"></i> <span>Tidak diizinkan menghapus/mengubah barang atau mengelola akun pengguna</span></li>
+            </ul>
+          </div>
+
+          <div class="mt-8 pt-5 border-t border-slate-100 dark:border-white/10 flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-shield text-slate-400"></i> Akses Petugas Operasional
+            </span>
+            <a href="login.html" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-600/25 transition text-center inline-flex items-center gap-1.5">
+              <span>Masuk Portal Staff</span>
+              <i class="fa-solid fa-arrow-right text-[11px]"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 7. FOOTER ==================== -->
+  <footer class="py-12 transition-colors duration-200 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
+          <i class="fa-solid fa-computer"></i>
+        </div>
+        <span class="font-medium">&copy; 2026 <strong>SIMLAB</strong> — Laboratory Inventory &amp; Borrowing Management System.</span>
+      </div>
+      <div class="flex items-center gap-6 font-semibold">
+        <a href="#katalog" class="hover:text-blue-600 dark:hover:text-white transition">Katalog Stok</a>
+        <a href="#role" class="hover:text-blue-600 dark:hover:text-white transition">Akun Demo</a>
+        <a href="login.html" class="text-blue-600 dark:text-blue-400 hover:underline">Halaman Login &rarr;</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script>
+    function toggleLandingTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      if (isDark) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('simlab_theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('simlab_theme', 'dark');
+      }
+      updateLandingThemeIcon();
+    }
+
+    function updateLandingThemeIcon() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const icon = document.getElementById('theme-toggle-icon-landing');
+      if (icon) {
+        icon.className = isDark ? 'fa-solid fa-sun text-sm text-amber-400' : 'fa-solid fa-moon text-sm text-slate-700';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateLandingThemeIcon();
+      DB.init();
+
+      // Mobile Menu Toggle
+      const menuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+      }
+
+      const items = DB.getItems();
+      const activeTrxs = DB.getTransactions().filter(t => t.status === 'Dipinjam');
+      const availableUnits = items.reduce((sum, item) => sum + Number(item.stock || 0), 0);
+      const borrowedUnits = activeTrxs.reduce((sum, trx) => sum + Number(trx.quantity || 0), 0);
+
+      // Update Hero Metrics
+      document.getElementById('lp-stat-sku').textContent = `${items.length} Jenis`;
+      document.getElementById('lp-stat-units').textContent = `${availableUnits + borrowedUnits} Unit`;
+      document.getElementById('lp-mock-available').textContent = `${availableUnits} Unit`;
+      document.getElementById('lp-mock-borrowed').textContent = `${borrowedUnits} Unit`;
+      document.getElementById('lp-mock-trx-count').textContent = `${activeTrxs.length} transaksi aktif`;
+
+      // Render 5 Mandatory Initial Items (BR001 - BR005) in Hero Mockup
+      const miniContainer = document.getElementById('lp-mini-items');
+      miniContainer.innerHTML = items.slice(0, 5).map(item => {
+        const stockNum = Number(item.stock);
+        const badgeClass = stockNum === 0
+          ? 'bg-rose-50 dark:bg-rose-500/15 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-500/30'
+          : stockNum <= 3
+            ? 'bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-500/30'
+            : 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/30';
+
+        return `
+          <div class="landing-mockup-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="mockup-item-code font-mono text-sm shrink-0">${item.code}</span>
+              <span class="mockup-item-name text-sm truncate">${item.name}</span>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold border tabular-nums shrink-0 ${badgeClass}">
+              Stok: ${stockNum}
+            </span>
+          </div>
+        `;
+      }).join('');
+
+      // Populate Category Filter in Live Catalog
+      const catSelect = document.getElementById('lp-catalog-category');
+      const categories = [...new Set(items.map(i => i.category))].sort();
+      categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        catSelect.appendChild(opt);
+      });
+
+      const renderCatalog = () => {
+        const q = (document.getElementById('lp-catalog-search').value || '').trim().toLowerCase();
+        const selectedCat = catSelect.value;
+
+        const filtered = items.filter(item => {
+          const matchText =
+            item.code.toLowerCase().includes(q) ||
+            item.name.toLowerCase().includes(q) ||
+            item.category.toLowerCase().includes(q) ||
+            (item.location || '').toLowerCase().includes(q);
+          const matchCat = selectedCat === 'ALL' || item.category === selectedCat;
+          return matchText && matchCat;
+        });
+
+        const grid = document.getElementById('lp-catalog-grid');
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-12 text-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 text-sm">
+              Tidak ada peralatan laboratorium yang sesuai dengan pencarian Anda.
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = filtered.map(item => {
+          const stockNum = Number(item.stock);
+          const statusDot = stockNum === 0 ? 'bg-rose-500' : stockNum <= 3 ? 'bg-amber-500' : 'bg-emerald-500';
+          const statusLabel = stockNum === 0 ? 'Habis' : stockNum <= 3 ? 'Stok Menipis' : 'Tersedia';
+
+          return `
+            <div class="bento-card p-5 rounded-2xl flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs mb-3">
+                  <span class="font-mono font-bold text-blue-600 dark:text-blue-400 px-2.5 py-0.5 rounded-lg bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20">${item.code}</span>
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                    <span class="w-1.5 h-1.5 rounded-full ${statusDot}"></span>${statusLabel}
+                  </span>
+                </div>
+                <h4 class="font-bold text-base leading-snug text-slate-900 dark:text-white">${item.name}</h4>
+                <div class="flex items-center gap-3 text-xs text-slate-600 dark:text-slate-400 mt-2 font-medium">
+                  <span><i class="fa-solid fa-layer-group text-slate-400 mr-1"></i>${item.category}</span>
+                  <span><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i>${item.location || 'Lab Utama'}</span>
+                </div>
+              </div>
+              <div class="mt-5 pt-3.5 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs">
+                <span class="text-slate-600 dark:text-slate-400 font-semibold">Sisa Stok:</span>
+                <span class="text-sm font-mono font-extrabold tabular-nums ${stockNum > 0 ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}">${stockNum} Unit</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      };
+
+      document.getElementById('lp-catalog-search').addEventListener('input', renderCatalog);
+      catSelect.addEventListener('change', renderCatalog);
+      renderCatalog();
+    });
+  </script>
+</body>
+</html>
