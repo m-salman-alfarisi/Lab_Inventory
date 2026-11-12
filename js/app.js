@@ -1295,6 +1295,213 @@ const App = {
     this.showToast('Laporan CSV berhasil diunduh!', 'success');
   },
 
+  printTransactionReport() {
+    const search = (document.getElementById('history-search')?.value || '').trim().toLowerCase();
+    const statusFilter = document.getElementById('history-filter-status')?.value || 'ALL';
+
+    const transactions = DB.getTransactions();
+    const filtered = transactions.filter(t => {
+      const matchSearch =
+        t.id.toLowerCase().includes(search) ||
+        t.borrowerName.toLowerCase().includes(search) ||
+        t.itemCode.toLowerCase().includes(search) ||
+        t.itemName.toLowerCase().includes(search) ||
+        (t.handledBy || '').toLowerCase().includes(search) ||
+        (t.returnedTo || '').toLowerCase().includes(search);
+      const matchStatus = statusFilter === 'ALL' || t.status === statusFilter;
+      return matchSearch && matchStatus;
+    });
+
+    const activeUser = this.currentUser || { name: 'Petugas Laboratorium', role: 'Staff Lab' };
+    const now = new Date();
+    const dateFormatted = now.toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    const timeFormatted = now.toLocaleTimeString('id-ID', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    const totalTrx = filtered.length;
+    const dipinjamQty = filtered.filter(t => t.status === 'Dipinjam').reduce((acc, t) => acc + (Number(t.quantity) || 1), 0);
+    const selesaiQty = filtered.filter(t => t.status === 'Selesai').reduce((acc, t) => acc + (Number(t.quantity) || 1), 0);
+
+    const filterText = statusFilter === 'Dipinjam' ? 'Sedang Dipinjam' : (statusFilter === 'Selesai' ? 'Selesai Dikembalikan' : 'Semua Status');
+
+    const reportContainer = document.getElementById('report-printable-area');
+    if (!reportContainer) return;
+
+    reportContainer.innerHTML = `
+      <div class="print-document">
+        <!-- KOP SURAT RESMI -->
+        <div class="print-kop">
+          <div class="print-kop-logo">
+            <div class="print-logo-box">SIMLAB</div>
+          </div>
+          <div class="print-kop-text">
+            <h2>KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</h2>
+            <h3>UPT LABORATORIUM KOMPUTER &amp; SISTEM INFORMATIKA TERPADU</h3>
+            <p>Sistem Informasi Manajemen Laboratorium Komputer (SIMLAB v2.4)</p>
+            <p class="print-kop-addr">Kampus Terpadu Gedung C Lantai 3 • Telp: (021) 7890-1234 • Email: simlab@univ.ac.id</p>
+          </div>
+        </div>
+        <div class="print-kop-divider-double"></div>
+
+        <!-- JUDUL LAPORAN -->
+        <div class="print-title-section">
+          <h1>LAPORAN ARSIP TRANSAKSI PEMINJAMAN &amp; PENGEMBALIAN</h1>
+          <p class="print-subtitle">Rekapitulasi resmi sirkulasi sarana dan prasarana laboratorium komputer</p>
+        </div>
+
+        <!-- METADATA LAPORAN -->
+        <div class="print-meta-grid">
+          <div class="print-meta-col">
+            <table class="print-meta-table">
+              <tr>
+                <td class="meta-label">Nomor Dokumen</td>
+                <td class="meta-separator">:</td>
+                <td class="meta-val font-mono">SIMLAB/LAP-TRX/${now.getFullYear()}${String(now.getMonth()+1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}/${Math.floor(100 + Math.random() * 900)}</td>
+              </tr>
+              <tr>
+                <td class="meta-label">Filter Status</td>
+                <td class="meta-separator">:</td>
+                <td class="meta-val"><strong>${filterText}</strong></td>
+              </tr>
+              <tr>
+                <td class="meta-label">Pencarian</td>
+                <td class="meta-separator">:</td>
+                <td class="meta-val">${search ? `"${this.escapeHtml(search)}"` : 'Semua Riwayat'}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="print-meta-col">
+            <table class="print-meta-table">
+              <tr>
+                <td class="meta-label">Tanggal Cetak</td>
+                <td class="meta-separator">:</td>
+                <td class="meta-val">${dateFormatted}, ${timeFormatted} WIB</td>
+              </tr>
+              <tr>
+                <td class="meta-label">Petugas Pencetak</td>
+                <td class="meta-separator">:</td>
+                <td class="meta-val"><strong>${this.escapeHtml(activeUser.name)}</strong> (${this.escapeHtml(activeUser.role)})</td>
+              </tr>
+              <tr>
+                <td class="meta-label">Total Data</td>
+                <td class="meta-separator">:</td>
+                <td class="meta-val"><strong>${totalTrx} Catatan</strong> (${dipinjamQty} unit dipinjam, ${selesaiQty} unit kembali)</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- TABEL DATA UTAMA -->
+        <table class="print-data-table">
+          <thead>
+            <tr>
+              <th style="width: 26px; text-align: center;">No</th>
+              <th style="width: 110px;">ID Transaksi</th>
+              <th>Peminjam &amp; Keperluan</th>
+              <th>Barang Laboratorium</th>
+              <th style="width: 42px; text-align: center;">Unit</th>
+              <th style="width: 80px;">Tgl Pinjam</th>
+              <th style="width: 80px;">Tgl Kembali</th>
+              <th style="width: 125px;">Petugas &amp; Catatan</th>
+              <th style="width: 75px; text-align: center;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.length === 0 ? `
+              <tr>
+                <td colspan="9" style="text-align: center; padding: 20px; color: #64748b;">
+                  Tidak ada data transaksi yang ditemukan sesuai filter.
+                </td>
+              </tr>
+            ` : filtered.map((t, idx) => `
+              <tr>
+                <td style="text-align: center;">${idx + 1}</td>
+                <td class="font-mono font-bold">${this.escapeHtml(t.id)}</td>
+                <td>
+                  <strong>${this.escapeHtml(t.borrowerName)}</strong>
+                  ${t.borrowerContact ? `<div class="print-subtext">Telp: ${this.escapeHtml(t.borrowerContact)}</div>` : ''}
+                  ${t.purpose ? `<div class="print-subtext">Keperluan: ${this.escapeHtml(t.purpose)}</div>` : ''}
+                </td>
+                <td>
+                  <strong class="font-mono text-blue">[${this.escapeHtml(t.itemCode)}]</strong> ${this.escapeHtml(t.itemName)}
+                </td>
+                <td style="text-align: center; font-weight: bold;">${t.quantity}</td>
+                <td>${this.formatDate(t.borrowDate)}</td>
+                <td>${t.returnDate ? this.formatDate(t.returnDate) : '<span style="color: #b45309; font-style: italic;">Belum Kembali</span>'}</td>
+                <td>
+                  <div>Pinjam: ${this.escapeHtml(t.handledBy || '-')}</div>
+                  ${t.returnedTo ? `<div>Kembali: ${this.escapeHtml(t.returnedTo)}</div>` : ''}
+                  ${t.returnNote ? `<div class="print-subtext"><em>"${this.escapeHtml(t.returnNote)}"</em></div>` : ''}
+                </td>
+                <td style="text-align: center;">
+                  <span class="print-badge ${t.status === 'Selesai' ? 'badge-selesai' : 'badge-dipinjam'}">
+                    ${t.status === 'Selesai' ? '✓ SELESAI' : '⏳ DIPINJAM'}
+                  </span>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <!-- RINGKASAN REKAPITULASI -->
+        <div class="print-summary-box">
+          <div class="summary-item">
+            <span>Total Transaksi Terdata:</span>
+            <strong>${totalTrx} Record</strong>
+          </div>
+          <div class="summary-item">
+            <span>Total Unit Dipinjam:</span>
+            <strong style="color: #b45309;">${dipinjamQty} Unit</strong>
+          </div>
+          <div class="summary-item">
+            <span>Total Unit Selesai:</span>
+            <strong style="color: #047857;">${selesaiQty} Unit</strong>
+          </div>
+        </div>
+
+        <!-- LEMBAR PENGESAHAN & TANDA TANGAN -->
+        <div class="print-signature-area">
+          <div class="sig-col">
+            <p>Mengetahui,</p>
+            <p class="sig-title">Kepala UPT Laboratorium Komputer</p>
+            <div class="sig-space"></div>
+            <p class="sig-name"><u>Dr. Hendra Gunawan, S.Kom., M.T.</u></p>
+            <p class="sig-nip">NIP. 19820415 200812 1 002</p>
+          </div>
+          <div class="sig-col">
+            <p>Kota Kampus, ${dateFormatted}</p>
+            <p class="sig-title">Petugas Pengelola / Staff Laboratorium</p>
+            <div class="sig-space"></div>
+            <p class="sig-name"><u>${this.escapeHtml(activeUser.name)}</u></p>
+            <p class="sig-nip">ID Pengguna: @${this.escapeHtml(activeUser.username || activeUser.role)}</p>
+          </div>
+        </div>
+
+        <!-- FOOTER DOKUMEN RESMI -->
+        <div class="print-footer-notice">
+          <span>Dicetak otomatis oleh Sistem Inventaris Laboratorium (SIMLAB v2.4 Cloud). Dokumen ini sah dan memiliki kekuatan pencatatan aset inventaris resmi.</span>
+          <span class="font-mono">Hal. 1/1</span>
+        </div>
+      </div>
+    `;
+
+    document.body.classList.add('printing-report');
+    document.body.classList.remove('printing-receipt');
+
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        document.body.classList.remove('printing-report');
+      }, 1000);
+    }, 150);
+  },
+
   // ==================== 6. MANAJEMEN PENGGUNA (ADMIN ONLY) ====================
   renderUsersTable() {
     if (!this.isAdmin()) return;
@@ -1681,7 +1888,14 @@ const App = {
   },
 
   printReceipt() {
-    window.print();
+    document.body.classList.add('printing-receipt');
+    document.body.classList.remove('printing-report');
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        document.body.classList.remove('printing-receipt');
+      }, 1000);
+    }, 100);
   }
 };
 
