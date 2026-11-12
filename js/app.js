@@ -1645,20 +1645,21 @@ const App = {
     document.getElementById('receipt-date').textContent = this.formatDate(trx.borrowDate);
     document.getElementById('receipt-staff').textContent = trx.handledBy || this.currentUser?.name || 'Petugas Lab';
 
-    // Generate QR Code via qrcodejs
+    // Generate QR Code via qrcodejs with responsive sizing
     const qrContainer = document.getElementById('receipt-qrcode');
     qrContainer.innerHTML = '';
+    const qrSize = window.innerWidth < 640 ? 110 : 130;
     if (window.QRCode) {
       new QRCode(qrContainer, {
         text: `SIMLAB-TRX:${trx.id}|${trx.itemCode}|QTY:${trx.quantity}|${trx.borrowerName}`,
-        width: 140,
-        height: 140,
+        width: qrSize,
+        height: qrSize,
         colorDark: "#0f172a",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.M
       });
     } else {
-      qrContainer.innerHTML = `<div class="font-mono text-xs font-bold text-slate-800 p-4 border border-dashed rounded-lg">${trx.id}</div>`;
+      qrContainer.innerHTML = `<div class="font-mono text-xs font-bold text-slate-800 p-3 border border-dashed rounded-lg">${trx.id}</div>`;
     }
 
     modal.classList.remove('hidden');
