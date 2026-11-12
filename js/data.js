@@ -411,12 +411,21 @@ const DB = {
     }
   },
 
-  // Cloud Sync (Optional Supabase REST API integration)
+  // Cloud Sync (Supabase REST API integration)
   getCloudConfig() {
+    const defaultCfg = {
+      url: 'https://bhzqzlimhvcsyxlcsmpv.supabase.co',
+      key: 'sb_publishable_-sc3t-Al08VyzADk1ndCyg_fHNllOXZ',
+      enabled: true
+    };
     try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEYS.CLOUD_CONFIG)) || { url: '', key: '', enabled: false };
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.CLOUD_CONFIG));
+      if (saved && typeof saved === 'object' && saved.url) {
+        return saved;
+      }
+      return defaultCfg;
     } catch {
-      return { url: '', key: '', enabled: false };
+      return defaultCfg;
     }
   },
 
