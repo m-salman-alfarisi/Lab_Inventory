@@ -184,7 +184,7 @@ const App = {
 
     const users = DB.getUsers();
     const user = users.find(
-      u => u.username.toLowerCase() === usernameInput.toLowerCase() && u.password === passwordInput
+      u => (u.username.toLowerCase() === usernameInput.toLowerCase() || (u.email && u.email.toLowerCase() === usernameInput.toLowerCase())) && u.password === passwordInput
     );
 
     if (!user) {
