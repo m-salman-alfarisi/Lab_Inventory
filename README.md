@@ -1,6 +1,7 @@
 # 🖥️ SIMLAB — Laboratory Inventory & Borrowing Management System
 
-[![Live Demo](https://img.shields.io/badge/Demo-Live%20Website-blue?style=for-the-badge&logo=githubpages&logoColor=white)](https://m-salman-alfarisi.github.io/Lab_Inventory/)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Live%20Website-black?style=for-the-badge&logo=vercel&logoColor=white)](https://simlab-inventory-three.vercel.app/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Website-blue?style=for-the-badge&logo=githubpages&logoColor=white)](https://m-salman-alfarisi.github.io/Lab_Inventory/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/m-salman-alfarisi/Lab_Inventory)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Completed-success?style=for-the-badge)](#)
@@ -28,10 +29,11 @@ Proyek ini dikembangkan untuk memenuhi ketentuan teknis **Coding Talent Challeng
 
 | Komponen | Tautan / Nilai |
 |---|---|
-| **URL Aplikasi (Hosting)** | [https://m-salman-alfarisi.github.io/Lab_Inventory/](https://m-salman-alfarisi.github.io/Lab_Inventory/) |
+| **URL Aplikasi (Vercel Primary)** | [https://simlab-inventory-three.vercel.app/](https://simlab-inventory-three.vercel.app/) |
+| **URL Mirror (GitHub Pages)** | [https://m-salman-alfarisi.github.io/Lab_Inventory/](https://m-salman-alfarisi.github.io/Lab_Inventory/) |
 | **URL Repository GitHub** | [https://github.com/m-salman-alfarisi/Lab_Inventory](https://github.com/m-salman-alfarisi/Lab_Inventory) |
-| **Kredensial Admin** | **Username:** `admin` \| **Password:** `password123` |
-| **Kredensial Staff** | **Username:** `staff` \| **Password:** `password123` |
+| **Kredensial Admin** | **Username / Email:** `admin` atau `admin.lab@univ.ac.id` \| **Password:** `password123` |
+| **Kredensial Staff** | **Username / Email:** `staff` atau `siti.lab@univ.ac.id` \| **Password:** `password123` |
 
 > 💡 **Catatan Penguji:** Halaman login juga dilengkapi dengan proteksi autentikasi aktif. Sesi login akan tetap tersimpan meski tab atau browser ditutup.
 
@@ -201,8 +203,9 @@ Lab_Inventory/
 ## 📋 Format Pengumpulan Tugas
 
 * **Nama Lengkap**: Muhammad Salman Alfarisi
-* **URL Aplikasi (Hosting)**: [https://m-salman-alfarisi.github.io/Lab_Inventory/](https://m-salman-alfarisi.github.io/Lab_Inventory/)
+* **URL Aplikasi (Hosting Vercel)**: [https://simlab-inventory-three.vercel.app/](https://simlab-inventory-three.vercel.app/)
+* **URL Alternatif (GitHub Pages)**: [https://m-salman-alfarisi.github.io/Lab_Inventory/](https://m-salman-alfarisi.github.io/Lab_Inventory/)
 * **URL Repository GitHub**: [https://github.com/m-salman-alfarisi/Lab_Inventory](https://github.com/m-salman-alfarisi/Lab_Inventory)
-* **Akun Demo Admin**: Username: `admin` | Password: `password123`
-* **Akun Demo Staff**: Username: `staff` | Password: `password123`
-* **Teknologi yang Digunakan**: HTML5, Tailwind CSS, Vanilla JavaScript (ES6+), Font Awesome 6 Icons, LocalStorage Persistence + Supabase Cloud REST Sync, GitHub Pages Hosting.
+* **Akun Demo Admin**: `admin` (atau `admin.lab@univ.ac.id`) | Password: `password123`
+* **Akun Demo Staff**: `staff` (atau `siti.lab@univ.ac.id`) | Password: `password123`
+* **Teknologi yang Digunakan**: HTML5, Tailwind CSS, Vanilla JavaScript (ES6+), Font Awesome 6 Icons, LocalStorage Persistence + Supabase PostgreSQL Cloud Database, Vercel & GitHub Pages Hosting.
